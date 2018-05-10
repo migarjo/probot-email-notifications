@@ -1,10 +1,15 @@
-module.exports = (robot) => {
-  // Your code here
-  robot.log('Yay, the app was loaded!')
+var CreateEmailNotifications = require('./lib/create-email-notifications')
 
-  // For more information on building apps:
-  // https://probot.github.io/docs/
+function probotEmailNotifications (robot) {
+  robot.on('repository.created', async context => {
+    return CreateEmailNotifications.analyze(context.github, context.repo(), context.payload, robot.log)
+  })
 
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
+  robot.on('repository.archived', async context => {
+    return CreateEmailNotifications.analyze(context.github, context.repo(), context.payload, robot.log)
+  })
+
+
 }
+
+module.exports = probotEmailNotifications
